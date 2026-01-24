@@ -1,6 +1,34 @@
-import express from 'express';
-
+import express, { urlencoded } from 'express';
+import {config} from 'dotenv'
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import fileUpload from 'express-fileupload';
+import { dbConnect } from './database/dbConnection.js';
+import messageRouter from './router/messageRouter.js';
+import { errorMiddleware } from './middleware/errorMiddleware.js';
 const app =express();
+config({path: './config/config.env'})
 
+app.use(cookieParser())
 
+app.use(express.json());
+
+app.use(cors({
+    origin: process.env.FRONTEND_URL,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+}))
+
+app.use(urlencoded({extended: true}))
+
+app.use(fileUpload({
+    useTempFiles: true,
+    tempFileDir: '/tmp/',
+}))
+
+app.use('/api/v1/message', messageRouter);
+
+dbConnect();
+
+app.use(errorMiddleware)
 export default app;
