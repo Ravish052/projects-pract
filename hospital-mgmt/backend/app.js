@@ -1,13 +1,15 @@
 import express, { urlencoded } from 'express';
-import {config} from 'dotenv'
+import { config } from 'dotenv'
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import fileUpload from 'express-fileupload';
 import { dbConnect } from './database/dbConnection.js';
 import messageRouter from './router/messageRouter.js';
 import { errorMiddleware } from './middleware/errorMiddleware.js';
-const app =express();
-config({path: './config/config.env'})
+import userRouter from './router/userRouter.js';
+
+const app = express();
+config({ path: './config/config.env' })
 
 app.use(cookieParser())
 
@@ -19,7 +21,7 @@ app.use(cors({
     credentials: true,
 }))
 
-app.use(urlencoded({extended: true}))
+app.use(urlencoded({ extended: true }))
 
 app.use(fileUpload({
     useTempFiles: true,
@@ -27,6 +29,7 @@ app.use(fileUpload({
 }))
 
 app.use('/api/v1/message', messageRouter);
+app.use('/api/v1/user', userRouter);
 
 dbConnect();
 

@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: [true, "Phone is required"],
         minlength: [10, "Phone number must be at least 10 digits long"],
-        maxlength: [11, "Phone number must be at most 15 digits long"],
+        maxlength: [11, "Phone number must be at most 11 digits long"],
     },
     nic: {
         type: String,
@@ -76,19 +76,19 @@ userSchema.pre('save', async function (next) {
     }
 })
 
-userSchema.methods.comparePassword = async(enteredPassword) => {
+userSchema.methods.comparePassword = async function(enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password);
 }
 
 userSchema.methods.generateJwt = function() {
-    return jwt,sign(
+    return jwt.sign(
         {
             id: this._id,
         }, process.env.JWT_SECRET,{
             expiresIn: process.env.JWT_EXPIRE,
         }
-
-    )
+    );
 }
 
-export const User = mongoose.model("User", userSchema)
+const User = mongoose.model("User", userSchema);
+export default User;
