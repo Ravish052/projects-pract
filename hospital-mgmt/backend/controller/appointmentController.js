@@ -4,7 +4,7 @@ import ErrorHandler from '../middleware/errorHandler.js'
 import { Appointment } from '../models/model.appointmentSchema.js'
 import { User } from '../models/model.userSchema.js'
 
-const postAppountment = catchAsyncErrors(async (req, res, next) => {
+export const postAppointment = catchAsyncErrors(async (req, res, next) => {
     const {
         firstName,
         lastName,
@@ -69,4 +69,50 @@ const postAppountment = catchAsyncErrors(async (req, res, next) => {
         message: 'Appointment created successfully'
     })
 
+});
+
+export const getAppointments = catchAsyncErrors(async (req, res, next) => {
+    const appointments = await Appointment.find();
+
+    res.status(200).json({
+        success: true,
+        appointments
+    });
+});
+
+export const updateappointmentStatus = catchAsyncErrors(async (req, res, next) => {
+    const {id} = req.params;
+
+    let appointment = await Appointment.findById(id);
+
+    if (!appointment) {
+        return next(new ErrorHandler('Appointment not found', 404));
+    }
+    
+    appointment = await Appointment.findByIdAndUpdate(id, req.body, {
+        new : true,
+        runValidators: true,
+        useFindAndModify: false
+    })
+    res.status(200).json({
+        success: true,
+        appointment,
+        message: 'Appointment updated successfully'
+    });
+});
+
+export const deleteAppointment = catchAsyncErrors(async (req, res, next) => {
+    const {id} = req.params;
+
+    const appointment = await Appointment.findById(id);
+
+    if (!appointment) {
+        return next(new ErrorHandler('Appointment not found', 404));
+    }
+    await appointment.deleteOne();
+
+    res.status(200).json({
+        success: true,
+        message: 'Appointment deleted successfully'
+    });
 });
