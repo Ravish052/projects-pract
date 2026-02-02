@@ -6,7 +6,7 @@ import Appointments from './pages/Appointments'
 import AboutUs from './pages/AboutUs'
 import Register from './pages/Register'
 import Login from './pages/Login'
-
+import { ToastContainer } from 'react-toastify'
 
 function App() {
   return (
@@ -19,6 +19,8 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
         </Routes>
+
+        <ToastContainer position='top-center' />
       </Router>
     </>
   )
