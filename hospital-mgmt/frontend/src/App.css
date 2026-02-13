@@ -1,13 +1,18 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 * {
-  margin: 0;
   padding: 0;
   box-sizing: border-box;
-  overflow-x: hidden;
   font-family: "Montserrat", sans-serif;
+}
+html {
+  overflow-x: hidden;
 }
 body {
   background: #e5e5e5;
+  margin: 0;
+}
+h1, h2, h3, h4, h5, h6, p {
+  margin: 0;
 }
 .btn {
   padding: 7px 20px;
